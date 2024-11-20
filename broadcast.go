@@ -10,10 +10,9 @@ import (
 )
 
 var (
-	ctrlBroadcastProcessing     = "CTRL_BROADCAST_PROCESSING"
 	ctrlBroadcastLeaderLiveness = "CTRL_BROADCAST_LEADER_LIVENESS"
 
-	fnBroadcast = map[string]func(app *app.App, e *cloudevents.Event) ([]byte, error){
+	broadcast = map[string]func(app *app.App, e *cloudevents.Event) ([]byte, error){
 		ctrlBroadcastLeaderLiveness: doBroadcastLeaderLiveness,
 	}
 )
@@ -27,11 +26,11 @@ func broadcastHandler(data interface{}, msg []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	if _, ok := fnBroadcast[e.Type()]; !ok {
+	if _, ok := broadcast[e.Type()]; !ok {
 		return nil, fmt.Errorf("failed: unsupported type: %v", e.Type())
 	}
 
-	return fnBroadcast[e.Type()](app, &e)
+	return broadcast[e.Type()](app, &e)
 }
 
 func doBroadcastLeaderLiveness(app *app.App, e *cloudevents.Event) ([]byte, error) {

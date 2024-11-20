@@ -16,7 +16,7 @@ import (
 var (
 	ctrlPingPong = "CTRL_PING_PONG"
 
-	fnLeader = map[string]func(app *app.App, e *cloudevents.Event) ([]byte, error){
+	leader = map[string]func(app *app.App, e *cloudevents.Event) ([]byte, error){
 		ctrlPingPong: doLeaderPingPong,
 	}
 )
@@ -30,11 +30,11 @@ func leaderHandler(data interface{}, msg []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	if _, ok := fnLeader[e.Type()]; !ok {
+	if _, ok := leader[e.Type()]; !ok {
 		return nil, fmt.Errorf("failed: unsupported type: %v", e.Type())
 	}
 
-	return fnLeader[e.Type()](app, &e)
+	return leader[e.Type()](app, &e)
 }
 
 func doLeaderPingPong(app *app.App, e *cloudevents.Event) ([]byte, error) {
