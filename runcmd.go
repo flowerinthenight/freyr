@@ -24,7 +24,7 @@ func run(ctx context.Context, done chan error) {
 	}
 
 	defer db.Close()
-	app := &app.App{
+	appdata := &app.App{
 		Mutex:     &sync.Mutex{},
 		SpannerDb: db,
 		LeaderOk: timedoff.New(time.Minute*30, &timedoff.CallbackT{
@@ -36,27 +36,27 @@ func run(ctx context.Context, done chan error) {
 
 	podIp := os.Getenv("K8S__MY_POD_IP") // via k8s downward API
 	op := hedge.New(
-		app.SpannerDb,
+		appdata.SpannerDb,
 		podIp+":8080",
 		"curmxdlock",
 		"curmxd",
 		"curmxd_kvstore",
 		hedge.WithGroupSyncInterval(time.Second*10),
-		hedge.WithLeaderHandler(app, leaderHandler),
-		hedge.WithBroadcastHandler(app, broadcastHandler),
+		hedge.WithLeaderHandler(appdata, leaderHandler),
+		hedge.WithBroadcastHandler(appdata, broadcastHandler),
 		hedge.WithLogger(log.New(io.Discard, "", 0)),
 	)
 
 	doneOp := make(chan error, 1)
 	go op.Run(cctx(ctx), doneOp)
-	app.Hedge = op
+	appdata.Hedge = op
 
 	// Attempt to wait for our leader before proceeding.
 	func() {
 		glog.Infof("attempt leader wait...")
-		msg := newEvent([]byte("PING"), "hedged", "CtrlPingPong")
+		msg := newEvent([]byte("PING"), app.EventSource, ctrlPingPong)
 		b, _ := json.Marshal(msg)
-		r, err := hedge.SendToLeader(ctx, app.Hedge, b)
+		r, err := hedge.SendToLeader(ctx, appdata.Hedge, b)
 		if err != nil {
 			return
 		}
@@ -69,7 +69,7 @@ func run(ctx context.Context, done chan error) {
 		}
 	}()
 
-	ll := leaderLive{app}
+	ll := leaderLive{appdata}
 	go ll.Run(cctx(ctx)) // periodic leader liveness broadcaster
 
 	<-ctx.Done()
