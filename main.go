@@ -23,9 +23,9 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-var version = "?"
-
 var (
+	version = "?"
+
 	rootcmd = &cobra.Command{
 		Use:   "hedged",
 		Short: "A generic daemon based on https://flowerinthenight/hedge/",
@@ -50,12 +50,31 @@ var (
 		},
 	}
 
-	dbstr string
-
 	cctx = func(p context.Context) context.Context {
 		return context.WithValue(p, struct{}{}, nil)
 	}
 )
+
+func init() {
+	rootcmd.Flags().SortFlags = false
+	rootcmd.PersistentFlags().StringVar(&params.DbString,
+		"db",
+		"",
+		"Spanner DB string, fmt: projects/{v}/instances/{v}/databases/{v}",
+	)
+
+	rootcmd.AddCommand(
+		testCmd(),
+	)
+
+	// For cobra + glog flags.
+	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
+}
+
+func main() {
+	cobra.EnableCommandSorting = false
+	rootcmd.Execute()
+}
 
 func run(ctx context.Context, done chan error) {
 	db, err := spanner.NewClient(cctx(ctx), params.DbString)
@@ -129,25 +148,4 @@ func testCmd() *cobra.Command {
 
 	cmd.Flags().SortFlags = false
 	return cmd
-}
-
-func init() {
-	rootcmd.Flags().SortFlags = false
-	rootcmd.PersistentFlags().StringVar(&params.DbString,
-		"db",
-		"",
-		"Spanner DB string, fmt: projects/{v}/instances/{v}/databases/{v}",
-	)
-
-	rootcmd.AddCommand(
-		testCmd(),
-	)
-
-	// For cobra + glog flags.
-	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
-}
-
-func main() {
-	cobra.EnableCommandSorting = false
-	rootcmd.Execute()
 }
