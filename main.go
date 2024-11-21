@@ -15,17 +15,31 @@ import (
 var (
 	version = "?"
 
-	root = &cobra.Command{
+	cctx = func(p context.Context) context.Context {
+		return context.WithValue(p, struct{}{}, nil)
+	}
+)
+
+func main() {
+	root := &cobra.Command{
 		Use:   "hedged",
 		Short: "A generic daemon based on https://flowerinthenight/hedge/",
 		Long: `A generic daemon based on https://flowerinthenight/hedge/.
 
-Example:
+The following example uses default arg values (see hedged run -h).
 
-  $ hedged run --logtostderr \
-    --db projects/myproject/instances/myinstance/databases/mydb`,
+Example:
+  # Run the first instance:
+  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8080
+
+  # Run the second instance (different terminal):
+  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8082
+
+  # Run the third instance (different terminal):
+  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8084
+`,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			goflag.Parse() // for cobra + glog flags
+			goflag.Parse() // combine cobra and glog flags
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			ctx := context.Background()
@@ -44,23 +58,13 @@ Example:
 		},
 	}
 
-	cctx = func(p context.Context) context.Context {
-		return context.WithValue(p, struct{}{}, nil)
-	}
-)
-
-func init() {
-	root.Flags().SortFlags = false
+	root.PersistentFlags().SortFlags = false
 	root.AddCommand(
 		runCmd(),
 		testCmd(),
 	)
 
-	// For cobra + glog flags.
-	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
-}
-
-func main() {
+	flag.CommandLine.AddGoFlagSet(goflag.CommandLine) // combine cobra and glog flags
 	cobra.EnableCommandSorting = false
 	root.Execute()
 }

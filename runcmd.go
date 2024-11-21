@@ -53,25 +53,26 @@ func runCmd() *cobra.Command {
 	)
 
 	cmd.Flags().StringVar(&params.HostPort,
-		"hostport",
+		"host-port",
 		":8080",
 		"TCP host:port for main comms (gRPC will be :port+1), fmt: [host]<:port>",
 	)
 
 	cmd.Flags().StringVar(&params.SocketFile,
-		"socketfile",
+		"socket-file",
 		filepath.Join(os.TempDir(), "hedged.sock"),
 		"Socket file for the API",
 	)
 
-	cmd.Flags().StringVar(&params.LockTable, "locktable", "hedged", "Spanner table for lock")
-	cmd.Flags().StringVar(&params.LockName, "lockname", "hedged", "Lock name")
-	cmd.Flags().StringVar(&params.LogTable, "logtable", "hedged_kv", "Spanner table for K/V storage and semaphore meta")
-	cmd.Flags().IntVar(&params.SyncInterval, "syncinterval", 10, "Membership sync interval in seconds")
+	cmd.Flags().StringVar(&params.LockTable, "lock-table", "hedged", "Spanner table for lock")
+	cmd.Flags().StringVar(&params.LockName, "lock-name", "hedged", "Lock name")
+	cmd.Flags().StringVar(&params.LogTable, "log-table", "hedged_kv", "Spanner table for K/V storage and semaphore meta")
+	cmd.Flags().IntVar(&params.SyncInterval, "sync-interval", 10, "Membership sync interval in seconds")
 	return cmd
 }
 
 func run(ctx context.Context, done chan error) {
+	glog.Infof("starting hedged on %v", params.DbString)
 	db, err := spanner.NewClient(cctx(ctx), params.DbString)
 	if err != nil {
 		glog.Fatal(err)
@@ -110,7 +111,6 @@ func run(ctx context.Context, done chan error) {
 		hedge.WithGroupSyncInterval(time.Second*time.Duration(params.SyncInterval)),
 		hedge.WithLeaderHandler(appdata, internal.LeaderHandler),
 		hedge.WithBroadcastHandler(appdata, internal.BroadcastHandler),
-		// hedge.WithLogger(log.New(io.Discard, "", 0)),
 	)
 
 	doneOp := make(chan error, 1)
@@ -129,7 +129,7 @@ func run(ctx context.Context, done chan error) {
 
 		switch {
 		case string(r) == "PONG":
-			glog.Infof("confirm: leader active")
+			glog.Infof("confirm leader active")
 		default:
 			glog.Errorf("failed: no leader?")
 		}

@@ -49,7 +49,7 @@ func doLeaderPingPong(app *app.App, e *cloudevents.Event) ([]byte, error) {
 type LeaderLive struct{ *app.App }
 
 func (l *LeaderLive) Run(ctx context.Context) {
-	glog.Infof("start leader liveness broadcaster...")
+	glog.Infof("start leader liveness broadcaster (every 5mins)")
 	ticker := time.NewTicker(time.Minute * 5)
 	var active int32
 	do := func() {
