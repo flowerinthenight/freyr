@@ -113,8 +113,8 @@ func run(ctx context.Context, done chan error) {
 		hedge.WithBroadcastHandler(appdata, internal.BroadcastHandler),
 	)
 
-	doneOp := make(chan error, 1)
-	go op.Run(cctx(ctx), doneOp)
+	doneHedge := make(chan error, 1)
+	go op.Run(cctx(ctx), doneHedge)
 	appdata.Hedge = op
 
 	// Attempt to wait for our leader before proceeding.
@@ -135,9 +135,14 @@ func run(ctx context.Context, done chan error) {
 		}
 	}()
 
+	doneSock := make(chan error, 1)
+	go internal.SocketListen(cctx(ctx), doneSock)
+
 	ll := internal.LeaderLive{App: appdata}
 	go ll.Run(cctx(ctx)) // periodic leader liveness broadcaster
 
-	<-ctx.Done()
+	<-ctx.Done() // wait signal
+	<-doneHedge  // wait for hedge
+	<-doneSock   // wait for socket
 	done <- nil
 }
