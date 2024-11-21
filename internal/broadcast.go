@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"encoding/json"
@@ -10,14 +10,14 @@ import (
 )
 
 var (
-	ctrlBroadcastLeaderLiveness = "CTRL_BROADCAST_LEADER_LIVENESS"
+	CtrlBroadcastLeaderLiveness = "CTRL_BROADCAST_LEADER_LIVENESS"
 
 	broadcast = map[string]func(app *app.App, e *cloudevents.Event) ([]byte, error){
-		ctrlBroadcastLeaderLiveness: doBroadcastLeaderLiveness,
+		CtrlBroadcastLeaderLiveness: doBroadcastLeaderLiveness,
 	}
 )
 
-func broadcastHandler(data interface{}, msg []byte) ([]byte, error) {
+func BroadcastHandler(data interface{}, msg []byte) ([]byte, error) {
 	app := data.(*app.App)
 	var e cloudevents.Event
 	err := json.Unmarshal(msg, &e)

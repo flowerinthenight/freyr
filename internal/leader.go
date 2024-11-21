@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"context"
@@ -14,14 +14,14 @@ import (
 )
 
 var (
-	ctrlPingPong = "CTRL_PING_PONG"
+	CtrlPingPong = "CTRL_PING_PONG"
 
 	leader = map[string]func(app *app.App, e *cloudevents.Event) ([]byte, error){
-		ctrlPingPong: doLeaderPingPong,
+		CtrlPingPong: doLeaderPingPong,
 	}
 )
 
-func leaderHandler(data interface{}, msg []byte) ([]byte, error) {
+func LeaderHandler(data interface{}, msg []byte) ([]byte, error) {
 	app := data.(*app.App)
 	var e cloudevents.Event
 	err := json.Unmarshal(msg, &e)
@@ -46,9 +46,9 @@ func doLeaderPingPong(app *app.App, e *cloudevents.Event) ([]byte, error) {
 	}
 }
 
-type leaderLive struct{ *app.App }
+type LeaderLive struct{ *app.App }
 
-func (l *leaderLive) Run(ctx context.Context) {
+func (l *LeaderLive) Run(ctx context.Context) {
 	glog.Infof("start leader liveness broadcaster...")
 	ticker := time.NewTicker(time.Minute * 5)
 	var active int32
@@ -61,10 +61,10 @@ func (l *leaderLive) Run(ctx context.Context) {
 		}
 
 		// Broadcast leader liveness.
-		b, _ := json.Marshal(newEvent(
+		b, _ := json.Marshal(NewEvent(
 			hedge.KeyValue{}, // unused
 			app.EventSource,
-			ctrlBroadcastLeaderLiveness,
+			CtrlBroadcastLeaderLiveness,
 		))
 
 		outs := l.Hedge.Broadcast(ctx, b)

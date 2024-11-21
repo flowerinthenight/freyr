@@ -12,6 +12,7 @@ import (
 	"cloud.google.com/go/spanner"
 	"github.com/flowerinthenight/hedge"
 	"github.com/flowerinthenight/hedged/app"
+	"github.com/flowerinthenight/hedged/internal"
 	"github.com/flowerinthenight/hedged/params"
 	"github.com/flowerinthenight/timedoff"
 	"github.com/golang/glog"
@@ -42,8 +43,8 @@ func run(ctx context.Context, done chan error) {
 		"curmxd",
 		"curmxd_kvstore",
 		hedge.WithGroupSyncInterval(time.Second*10),
-		hedge.WithLeaderHandler(appdata, leaderHandler),
-		hedge.WithBroadcastHandler(appdata, broadcastHandler),
+		hedge.WithLeaderHandler(appdata, internal.LeaderHandler),
+		hedge.WithBroadcastHandler(appdata, internal.BroadcastHandler),
 		hedge.WithLogger(log.New(io.Discard, "", 0)),
 	)
 
@@ -54,7 +55,7 @@ func run(ctx context.Context, done chan error) {
 	// Attempt to wait for our leader before proceeding.
 	func() {
 		glog.Infof("attempt leader wait...")
-		msg := newEvent([]byte("PING"), app.EventSource, ctrlPingPong)
+		msg := internal.NewEvent([]byte("PING"), app.EventSource, internal.CtrlPingPong)
 		b, _ := json.Marshal(msg)
 		r, err := hedge.SendToLeader(ctx, appdata.Hedge, b)
 		if err != nil {
@@ -69,7 +70,7 @@ func run(ctx context.Context, done chan error) {
 		}
 	}()
 
-	ll := leaderLive{appdata}
+	ll := internal.LeaderLive{App: appdata}
 	go ll.Run(cctx(ctx)) // periodic leader liveness broadcaster
 
 	<-ctx.Done()
