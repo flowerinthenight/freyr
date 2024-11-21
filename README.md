@@ -1,1 +1,1 @@
-Nothing to see here.
+A generic daemon based on [hedge](https://github.com/flowerinthenight/hedge).
