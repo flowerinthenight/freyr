@@ -7,7 +7,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/flowerinthenight/hedged/params"
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
@@ -16,10 +15,15 @@ import (
 var (
 	version = "?"
 
-	rootcmd = &cobra.Command{
+	root = &cobra.Command{
 		Use:   "hedged",
 		Short: "A generic daemon based on https://flowerinthenight/hedge/",
-		Long:  `A generic daemon based on https://flowerinthenight/hedge/.`,
+		Long: `A generic daemon based on https://flowerinthenight/hedge/.
+
+Example:
+
+  $ hedged run --logtostderr \
+    --db projects/myproject/instances/myinstance/databases/mydb`,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			goflag.Parse() // for cobra + glog flags
 		},
@@ -46,14 +50,9 @@ var (
 )
 
 func init() {
-	rootcmd.Flags().SortFlags = false
-	rootcmd.PersistentFlags().StringVar(&params.DbString,
-		"db",
-		"",
-		"Spanner DB string, fmt: projects/{v}/instances/{v}/databases/{v}",
-	)
-
-	rootcmd.AddCommand(
+	root.Flags().SortFlags = false
+	root.AddCommand(
+		runCmd(),
 		testCmd(),
 	)
 
@@ -63,5 +62,5 @@ func init() {
 
 func main() {
 	cobra.EnableCommandSorting = false
-	rootcmd.Execute()
+	root.Execute()
 }
