@@ -22,7 +22,7 @@ type Data struct {
 	// When active/ok, we have a live leader in the group.
 	LeaderOk *timedoff.TimedOff
 
-	SubLdrMutex    sync.Mutex
-	SubLdrSocket   string
-	SubLdrInterval atomic.Int64
+	IsLeader     atomic.Int32
+	SubLdrMutex  sync.Mutex
+	SubLdrSocket string
 }

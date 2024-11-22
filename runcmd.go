@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"net"
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -94,6 +97,43 @@ func run(ctx context.Context, done chan error) {
 		params.LogTable,
 		hedge.WithDuration(params.LeaderInterval),
 		hedge.WithGroupSyncInterval(time.Millisecond*time.Duration(params.SyncInterval)),
+		hedge.WithLeaderCallback(appdata, func(d interface{}, m []byte) {
+			ad := d.(*app.Data)
+			ad.SubLdrMutex.Lock()
+			socket := ad.SubLdrSocket
+			ad.SubLdrMutex.Unlock()
+
+			func() {
+				if socket == "" {
+					return
+				}
+
+				conn, err := net.Dial("unix", socket)
+				if err != nil {
+					glog.Errorf("Dial failed: %v", err)
+					return
+				}
+
+				defer conn.Close()
+
+				mm := strings.Split(string(m), " ")
+				tmembers := ad.Hedge.Members()
+				members := []string{mm[1]}
+				for _, v := range tmembers {
+					if v != mm[1] {
+						members = append(members, v)
+					}
+				}
+
+				val, _ := strconv.Atoi(mm[0])
+				msg := fmt.Sprintf("+%d %s", val, strings.Join(members, " "))
+				_, err = conn.Write([]byte(msg + app.CRLF))
+				if err != nil {
+					glog.Errorf("Write failed: %v", err)
+					return
+				}
+			}()
+		}),
 		hedge.WithLeaderHandler(appdata, internal.LeaderHandler),
 		hedge.WithBroadcastHandler(appdata, internal.BroadcastHandler),
 	)
@@ -122,9 +162,6 @@ func run(ctx context.Context, done chan error) {
 
 	doneSock := make(chan error, 1)
 	go internal.SocketListen(cctx(ctx), appdata, doneSock)
-
-	ln := internal.LeaderNotify{Data: appdata}
-	go ln.Do(cctx(ctx)) // subscribe leader notifications
 
 	ll := internal.LeaderLive{Data: appdata}
 	go ll.Run(cctx(ctx)) // periodic leader liveness broadcaster

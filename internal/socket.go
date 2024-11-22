@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"strconv"
 	"sync/atomic"
 
 	"github.com/flowerinthenight/hedged/app"
@@ -109,24 +108,10 @@ func do(conn net.Conn, appdata *app.Data) {
 		appdata.SubLdrMutex.Lock()
 		appdata.SubLdrSocket = string(cmds[3])
 		appdata.SubLdrMutex.Unlock()
-
-		if len(cmds) >= 6 { // timeout provided
-			tm, err := strconv.Atoi(string(cmds[5]))
-			if err != nil {
-				serr := fmt.Sprintf("-ERR %v", err.Error())
-				conn.Write([]byte(serr + app.CRLF))
-				return
-			}
-
-			if tm > 0 {
-				appdata.SubLdrInterval.Store(int64(tm))
-			}
-		}
 	case "UNSUBLDR":
 		appdata.SubLdrMutex.Lock()
 		appdata.SubLdrSocket = ""
 		appdata.SubLdrMutex.Unlock()
-		appdata.SubLdrInterval.Store(0)
 	default:
 		conn.Write([]byte("-ERR unknown command" + app.CRLF))
 		return

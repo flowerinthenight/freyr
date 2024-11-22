@@ -48,6 +48,7 @@ Example:
 		runCmd(),
 		apiCmd(),
 		sinkCmd(),
+		testCmd(),
 	)
 
 	flag.CommandLine.AddGoFlagSet(goflag.CommandLine) // combine cobra and glog flags
