@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/flowerinthenight/hedged/app"
 	"github.com/spf13/cobra"
 	"golang.org/x/exp/slog"
 )
@@ -43,9 +44,9 @@ func apiCmd() *cobra.Command {
 			fmt.Fprintf(&api, "$")
 			for _, v := range args {
 				fmt.Fprintf(&api, "%d", len(v))
-				fmt.Fprintf(&api, "\r\n")
+				fmt.Fprintf(&api, app.CRLF)
 				fmt.Fprintf(&api, "%s", v)
-				fmt.Fprintf(&api, "\r\n")
+				fmt.Fprintf(&api, app.CRLF)
 			}
 
 			_, err = conn.Write([]byte(api.String()))

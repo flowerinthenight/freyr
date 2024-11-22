@@ -10,6 +10,8 @@ import (
 
 const (
 	EventSource = "hedged"
+
+	CRLF = "\r\n"
 )
 
 type App struct {
