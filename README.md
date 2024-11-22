@@ -13,3 +13,13 @@ $SUBLDR <path/to/socket> [interval-in-seconds]
 # Example:
 $SUBLDR /tmp/hedged-notify.sock 2
 ```
+
+#### UNSUBLDR
+
+``` sh
+# Unsubscribe from leader notifications:
+$SUBLDR
+
+# Example:
+$SUBLDR
+```
