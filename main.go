@@ -1,20 +1,12 @@
 package main
 
 import (
-	"context"
 	goflag "flag"
 	"log"
 
+	"github.com/flowerinthenight/hedged/subcmds"
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
-)
-
-var (
-	version = "?"
-
-	cctx = func(p context.Context) context.Context {
-		return context.WithValue(p, struct{}{}, nil)
-	}
 )
 
 func main() {
@@ -27,13 +19,13 @@ The following example uses default arg values (see hedged run -h).
 
 Example:
   # Run the first instance:
-  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8080
+  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8080 --socket-file /tmp/hedged-8080.sock
 
   # Run the second instance (different terminal):
-  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8082
+  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8082 --socket-file /tmp/hedged-8082.sock
 
   # Run the third instance (different terminal):
-  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8084
+  $ hedged run --logtostderr --db projects/myproject/instances/myinstance/databases/mydb --host-port :8084 --socket-file /tmp/hedged-8084.sock
 `,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			goflag.Parse() // combine cobra and glog flags
@@ -45,10 +37,10 @@ Example:
 
 	root.PersistentFlags().SortFlags = false
 	root.AddCommand(
-		runCmd(),
-		apiCmd(),
-		sinkCmd(),
-		testCmd(),
+		subcmds.RunCmd(),
+		subcmds.APICmd(),
+		subcmds.SinkCmd(),
+		subcmds.TestCmd(),
 	)
 
 	flag.CommandLine.AddGoFlagSet(goflag.CommandLine) // combine cobra and glog flags

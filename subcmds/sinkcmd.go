@@ -1,4 +1,4 @@
-package main
+package subcmds
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func sinkCmd() *cobra.Command {
+func SinkCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "sink <path/to/socket>",
 		Short: "Sink server for leader notifications",

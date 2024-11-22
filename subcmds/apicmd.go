@@ -1,4 +1,4 @@
-package main
+package subcmds
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func apiCmd() *cobra.Command {
+func APICmd() *cobra.Command {
 	var (
 		socketFile string
 	)

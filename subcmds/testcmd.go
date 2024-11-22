@@ -1,4 +1,4 @@
-package main
+package subcmds
 
 import (
 	"log"
@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func testCmd() *cobra.Command {
+func TestCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "test",
 		Short: "Anything, throw-away code",

@@ -1,4 +1,4 @@
-package main
+package subcmds
 
 import (
 	"context"
@@ -23,7 +23,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func runCmd() *cobra.Command {
+var (
+	cctx = func(p context.Context) context.Context {
+		return context.WithValue(p, struct{}{}, nil)
+	}
+)
+
+func RunCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "run",
 		Short: "Daemonize (run as service)",
