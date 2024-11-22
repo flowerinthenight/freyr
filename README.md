@@ -42,7 +42,7 @@ $ ./hedged api SUBLDR /tmp/hedged-notify-8082.sock --socket-file /tmp/hedged-808
 
 ## API Reference
 
-The API protocol uses a subset of Redis' [RESP](https://redis.io/docs/latest/develop/reference/protocol-spec/) wire protocol; specifically, **Simple strings**, **Simple errors**, and **Bulk strings**. Commands use the `$<length>\r\n<data>\r\n` format, return values use the `+<data>\r\n` format, and error messages use the `-Error message\r\n` format.
+The API protocol uses a subset of Redis' [RESP](https://redis.io/docs/latest/develop/reference/protocol-spec/) wire protocol; specifically, [Simple strings](https://redis.io/docs/latest/develop/reference/protocol-spec/#simple-strings), [Simple errors](https://redis.io/docs/latest/develop/reference/protocol-spec/#simple-errors), and [Bulk strings](https://redis.io/docs/latest/develop/reference/protocol-spec/#bulk-strings). Commands use the `$<length>\r\n<data>\r\n` format, return values use the `+<data>\r\n` format, and error messages use the `-Error message\r\n` format.
 
 #### SUBLDR
 
