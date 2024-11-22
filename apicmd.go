@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"log/slog"
 	"net"
 	"os"
 	"path/filepath"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/flowerinthenight/hedged/app"
 	"github.com/spf13/cobra"
-	"golang.org/x/exp/slog"
 )
 
 func apiCmd() *cobra.Command {
