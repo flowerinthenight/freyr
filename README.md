@@ -6,8 +6,10 @@ A generic daemon based on [hedge](https://github.com/flowerinthenight/hedge).
 
 #### SUBLDR
 
+Subscribe to leader notifications. If `interval-in-seconds` in not provided, it will default to 1s.
+
 ``` sh
-# Subscribe to leader notifications:
+# Command:
 $SUBLDR <path/to/socket> [interval-in-seconds]
 
 # Example:
@@ -16,10 +18,9 @@ $SUBLDR /tmp/hedged-notify.sock 2
 
 #### UNSUBLDR
 
-``` sh
-# Unsubscribe from leader notifications:
-$SUBLDR
+Unsubscribe from leader notifications.
 
-# Example:
+``` sh
+# Command:
 $SUBLDR
 ```
