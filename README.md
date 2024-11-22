@@ -1,6 +1,6 @@
 ## Overview
 
-A daemon based on [hedge](https://github.com/flowerinthenight/hedge).
+A long-running service based on [hedge](https://github.com/flowerinthenight/hedge).
 
 ## API Reference
 
