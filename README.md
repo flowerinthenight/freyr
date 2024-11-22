@@ -5,6 +5,26 @@
 
 A long-running service based on [hedge](https://github.com/flowerinthenight/hedge).
 
+Sample run:
+
+``` sh
+# Run 1st instance:
+$ ./hedged run --logtostderr \
+  --db projects/{v}/instances/{v}/databases/{v} \
+  --host-port :8080 \
+  --lock-table mylocktable \
+  --log-table mylocktable_log \
+  --socket-file /tmp/hedged-8080.sock
+
+# Run 2nd instance (different terminal):
+$ ./hedged run --logtostderr \
+  --db projects/{v}/instances/{v}/databases/{v} \
+  --host-port :8082 \
+  --lock-table mylocktable \
+  --log-table mylocktable_log \
+  --socket-file /tmp/hedged-8082.sock
+```
+
 ## API Reference
 
 #### SUBLDR
