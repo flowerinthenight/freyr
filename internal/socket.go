@@ -117,7 +117,9 @@ func do(conn net.Conn, appdata *app.Data) {
 				return
 			}
 
-			appdata.SubLdrInterval.Store(int64(tm))
+			if tm > 0 {
+				appdata.SubLdrInterval.Store(int64(tm))
+			}
 		}
 	case "UNSUBLDR":
 		appdata.SubLdrMutex.Lock()
