@@ -64,8 +64,8 @@ func apiCmd() *cobra.Command {
 
 			slog.Info("reply:",
 				"str", string(b),
-				"hex", fmt.Sprintf("%X", b),
-				"dec", fmt.Sprintf("%d", b),
+				"hex", fmt.Sprintf("0x%X", b),
+				"dec10", fmt.Sprintf("%d", b),
 			)
 		},
 		SilenceUsage: true,
