@@ -22,10 +22,9 @@ import (
 
 func runCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:    "run",
-		Short:  "Daemonize (run as service)",
-		Long:   "Daemonize (run as service).",
-		PreRun: func(cmd *cobra.Command, args []string) {},
+		Use:   "run",
+		Short: "Daemonize (run as service)",
+		Long:  "Daemonize (run as service).",
 		Run: func(cmd *cobra.Command, args []string) {
 			ctx := context.Background()
 			quit, cancel := context.WithCancel(ctx)

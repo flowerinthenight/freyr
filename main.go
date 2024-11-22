@@ -47,6 +47,7 @@ Example:
 	root.AddCommand(
 		runCmd(),
 		apiCmd(),
+		subSinkCmd(),
 	)
 
 	flag.CommandLine.AddGoFlagSet(goflag.CommandLine) // combine cobra and glog flags
