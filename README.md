@@ -6,7 +6,7 @@ A generic daemon based on [hedge](https://github.com/flowerinthenight/hedge).
 
 #### SUBLDR
 
-Subscribe to leader notifications. If `interval-in-seconds` in not provided, it will default to 1s. Minimum interval is 1.
+Subscribe to leader notifications. If `interval-in-seconds` in not provided, it will default to 1s. Minimum interval is 1s.
 
 ``` sh
 # Command:
