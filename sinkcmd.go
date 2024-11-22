@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io"
 	"net"
 	"os"
 	"os/signal"
@@ -86,15 +87,13 @@ func sink(ctx context.Context, socket string, done chan error) {
 		}
 
 		go func(nc net.Conn) {
-			limit := 65_536 // max 65KB
-			b := make([]byte, limit)
-			_, err := conn.Read(b)
+			b, err := io.ReadAll(nc)
 			if err != nil {
 				glog.Error(err)
 				return
 			}
 
-			glog.Infof("notification: %q", string(b[:4]))
+			glog.Infof("notification: %v", string(b))
 		}(conn)
 	}
 }

@@ -5,7 +5,7 @@ go 1.23.3
 require (
 	cloud.google.com/go/spanner v1.73.0
 	github.com/cloudevents/sdk-go/v2 v2.15.2
-	github.com/flowerinthenight/hedge v1.16.9
+	github.com/flowerinthenight/hedge v1.16.10
 	github.com/flowerinthenight/timedoff v1.0.2
 	github.com/golang/glog v1.2.3
 	github.com/google/uuid v1.6.0
@@ -31,7 +31,7 @@ require (
 	github.com/envoyproxy/go-control-plane v0.13.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.1.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
-	github.com/flowerinthenight/spindle/v2 v2.0.5 // indirect
+	github.com/flowerinthenight/spindle/v2 v2.1.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
