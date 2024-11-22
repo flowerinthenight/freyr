@@ -40,6 +40,7 @@ func apiCmd() *cobra.Command {
 				return
 			}
 
+			defer conn.Close()
 			var api strings.Builder
 			fmt.Fprintf(&api, "$")
 			for _, v := range args {
@@ -52,12 +53,6 @@ func apiCmd() *cobra.Command {
 			_, err = conn.Write([]byte(api.String()))
 			if err != nil {
 				slog.Error("Write failed:", "err", err)
-				return
-			}
-
-			err = conn.(*net.UnixConn).CloseWrite()
-			if err != nil {
-				slog.Error("CloseWrite failed:", "err", err)
 				return
 			}
 

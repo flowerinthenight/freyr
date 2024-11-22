@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net"
 	"sync/atomic"
 	"time"
 
@@ -43,6 +44,51 @@ func doLeaderPingPong(app *app.Data, e *cloudevents.Event) ([]byte, error) {
 		return nil, fmt.Errorf("invalid message")
 	default:
 		return []byte("PONG"), nil
+	}
+}
+
+type LeaderNotify struct{ *app.Data }
+
+func (l *LeaderNotify) Do(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+		}
+
+		hl, _ := l.Hedge.HasLock()
+		if hl {
+			l.SubLdrMutex.Lock()
+			socket := l.SubLdrSocket
+			l.SubLdrMutex.Unlock()
+
+			func() {
+				if socket == "" {
+					return
+				}
+
+				conn, err := net.Dial("unix", socket)
+				if err != nil {
+					glog.Errorf("Dial failed: %v", err)
+					return
+				}
+
+				defer conn.Close()
+				_, err = conn.Write([]byte("sample"))
+				if err != nil {
+					glog.Errorf("Write failed: %v", err)
+					return
+				}
+			}()
+		}
+
+		sec := l.SubLdrInterval.Load()
+		if sec == 0 {
+			sec = 1 // default 1s
+		}
+
+		time.Sleep(time.Second * time.Duration(sec))
 	}
 }
 

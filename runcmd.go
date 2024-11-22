@@ -7,7 +7,6 @@ import (
 	"os/signal"
 	"path/filepath"
 	"strings"
-	"sync"
 	"syscall"
 	"time"
 
@@ -80,7 +79,6 @@ func run(ctx context.Context, done chan error) {
 
 	defer db.Close()
 	appdata := &app.Data{
-		Mutex:     &sync.Mutex{},
 		SpannerDb: db,
 		LeaderOk: timedoff.New(time.Minute*30, &timedoff.CallbackT{
 			Callback: func(args interface{}) {
@@ -137,6 +135,9 @@ func run(ctx context.Context, done chan error) {
 
 	doneSock := make(chan error, 1)
 	go internal.SocketListen(cctx(ctx), appdata, doneSock)
+
+	ln := internal.LeaderNotify{Data: appdata}
+	go ln.Do(cctx(ctx)) // subscribe leader notifications
 
 	ll := internal.LeaderLive{Data: appdata}
 	go ll.Run(cctx(ctx)) // periodic leader liveness broadcaster

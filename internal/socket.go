@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strconv"
 	"sync/atomic"
 
 	"github.com/flowerinthenight/hedged/app"
@@ -62,7 +63,6 @@ func SocketListen(ctx context.Context, appdata *app.Data, done ...chan error) {
 
 func do(conn net.Conn, appdata *app.Data) {
 	defer conn.Close()
-	_ = appdata
 	limit := 65_536 // max 65KB
 	b := make([]byte, limit)
 	n, err := conn.Read(b)
@@ -105,7 +105,25 @@ func do(conn net.Conn, appdata *app.Data) {
 			return
 		}
 
-		glog.Infof("subscribe to leader notifications via %v", string(cmds[3]))
+		appdata.SubLdrMutex.Lock()
+		appdata.SubLdrSocket = string(cmds[3])
+		appdata.SubLdrMutex.Unlock()
+
+		if len(cmds) >= 6 { // timeout provided
+			tm, err := strconv.Atoi(string(cmds[5]))
+			if err != nil {
+				serr := fmt.Sprintf("-ERR %v", err.Error())
+				conn.Write([]byte(serr + app.CRLF))
+				return
+			}
+
+			appdata.SubLdrInterval.Store(int64(tm))
+		}
+	case "UNSUBLDR":
+		appdata.SubLdrMutex.Lock()
+		appdata.SubLdrSocket = ""
+		appdata.SubLdrMutex.Unlock()
+		appdata.SubLdrInterval.Store(0)
 	default:
 		conn.Write([]byte("-ERR unknown command" + app.CRLF))
 		return
