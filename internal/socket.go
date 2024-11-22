@@ -9,11 +9,12 @@ import (
 	"strings"
 	"sync/atomic"
 
+	"github.com/flowerinthenight/hedged/app"
 	"github.com/flowerinthenight/hedged/params"
 	"github.com/golang/glog"
 )
 
-func SocketListen(ctx context.Context, done ...chan error) {
+func SocketListen(ctx context.Context, app *app.App, done ...chan error) {
 	rmsock := func() {
 		if _, err := os.Stat(params.SocketFile); err == nil {
 			os.RemoveAll(params.SocketFile)
@@ -56,7 +57,6 @@ func SocketListen(ctx context.Context, done ...chan error) {
 			continue
 		}
 
-		glog.Infof(">>>")
 		go do(conn)
 	}
 }

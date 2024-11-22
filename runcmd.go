@@ -136,7 +136,7 @@ func run(ctx context.Context, done chan error) {
 	}()
 
 	doneSock := make(chan error, 1)
-	go internal.SocketListen(cctx(ctx), doneSock)
+	go internal.SocketListen(cctx(ctx), appdata, doneSock)
 
 	ll := internal.LeaderLive{App: appdata}
 	go ll.Run(cctx(ctx)) // periodic leader liveness broadcaster
