@@ -44,28 +44,14 @@ func runCmd() *cobra.Command {
 	}
 
 	cmd.Flags().SortFlags = false
-	cmd.Flags().StringVar(&params.DbString,
-		"db",
-		"",
-		"Spanner DB connection URL, fmt: projects/{v}/instances/{v}/databases/{v}",
-	)
-
-	cmd.Flags().StringVar(&params.HostPort,
-		"host-port",
-		":8080",
-		"TCP host:port for main comms (gRPC will be :port+1), fmt: [host]<:port>",
-	)
-
-	cmd.Flags().StringVar(&params.SocketFile,
-		"socket-file",
-		filepath.Join(os.TempDir(), "hedged.sock"),
-		"Socket file for the API",
-	)
-
+	cmd.Flags().StringVar(&params.DbString, "db", "", "Spanner DB connection URL, fmt: projects/{v}/instances/{v}/databases/{v}")
+	cmd.Flags().StringVar(&params.HostPort, "host-port", ":8080", "TCP host:port for main comms (gRPC will be :port+1), fmt: [host]<:port>")
+	cmd.Flags().StringVar(&params.SocketFile, "socket-file", filepath.Join(os.TempDir(), "hedged.sock"), "Socket file for the API")
 	cmd.Flags().StringVar(&params.LockTable, "lock-table", "hedged", "Spanner table for lock")
 	cmd.Flags().StringVar(&params.LockName, "lock-name", "hedged", "Lock name")
 	cmd.Flags().StringVar(&params.LogTable, "log-table", "hedged_kv", "Spanner table for K/V storage and semaphore meta")
-	cmd.Flags().IntVar(&params.SyncInterval, "sync-interval", 10, "Membership sync interval in seconds")
+	cmd.Flags().Int64Var(&params.LeaderInterval, "leader-interval", 5000, "Membership sync interval in milliseconds")
+	cmd.Flags().Int64Var(&params.SyncInterval, "sync-interval", 5000, "Membership sync interval in milliseconds")
 	return cmd
 }
 
@@ -106,7 +92,8 @@ func run(ctx context.Context, done chan error) {
 		params.LockTable,
 		params.LockName,
 		params.LogTable,
-		hedge.WithGroupSyncInterval(time.Second*time.Duration(params.SyncInterval)),
+		hedge.WithDuration(params.LeaderInterval),
+		hedge.WithGroupSyncInterval(time.Millisecond*time.Duration(params.SyncInterval)),
 		hedge.WithLeaderHandler(appdata, internal.LeaderHandler),
 		hedge.WithBroadcastHandler(appdata, internal.BroadcastHandler),
 	)
