@@ -79,7 +79,7 @@ func run(ctx context.Context, done chan error) {
 	}
 
 	defer db.Close()
-	appdata := &app.App{
+	appdata := &app.Data{
 		Mutex:     &sync.Mutex{},
 		SpannerDb: db,
 		LeaderOk: timedoff.New(time.Minute*30, &timedoff.CallbackT{
@@ -138,7 +138,7 @@ func run(ctx context.Context, done chan error) {
 	doneSock := make(chan error, 1)
 	go internal.SocketListen(cctx(ctx), appdata, doneSock)
 
-	ll := internal.LeaderLive{App: appdata}
+	ll := internal.LeaderLive{Data: appdata}
 	go ll.Run(cctx(ctx)) // periodic leader liveness broadcaster
 
 	<-ctx.Done() // wait signal

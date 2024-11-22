@@ -12,13 +12,13 @@ import (
 var (
 	CtrlBroadcastLeaderLiveness = "CTRL_BROADCAST_LEADER_LIVENESS"
 
-	broadcast = map[string]func(app *app.App, e *cloudevents.Event) ([]byte, error){
+	broadcast = map[string]func(app *app.Data, e *cloudevents.Event) ([]byte, error){
 		CtrlBroadcastLeaderLiveness: doBroadcastLeaderLiveness,
 	}
 )
 
-func BroadcastHandler(data interface{}, msg []byte) ([]byte, error) {
-	app := data.(*app.App)
+func BroadcastHandler(ad interface{}, msg []byte) ([]byte, error) {
+	appdata := ad.(*app.Data)
 	var e cloudevents.Event
 	err := json.Unmarshal(msg, &e)
 	if err != nil {
@@ -30,10 +30,10 @@ func BroadcastHandler(data interface{}, msg []byte) ([]byte, error) {
 		return nil, fmt.Errorf("failed: unsupported type: %v", e.Type())
 	}
 
-	return broadcast[e.Type()](app, &e)
+	return broadcast[e.Type()](appdata, &e)
 }
 
-func doBroadcastLeaderLiveness(app *app.App, e *cloudevents.Event) ([]byte, error) {
+func doBroadcastLeaderLiveness(app *app.Data, e *cloudevents.Event) ([]byte, error) {
 	app.LeaderOk.On()
 	return nil, nil
 }

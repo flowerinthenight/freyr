@@ -16,13 +16,13 @@ import (
 var (
 	CtrlPingPong = "CTRL_PING_PONG"
 
-	leader = map[string]func(app *app.App, e *cloudevents.Event) ([]byte, error){
+	leader = map[string]func(app *app.Data, e *cloudevents.Event) ([]byte, error){
 		CtrlPingPong: doLeaderPingPong,
 	}
 )
 
 func LeaderHandler(data interface{}, msg []byte) ([]byte, error) {
-	app := data.(*app.App)
+	app := data.(*app.Data)
 	var e cloudevents.Event
 	err := json.Unmarshal(msg, &e)
 	if err != nil {
@@ -37,7 +37,7 @@ func LeaderHandler(data interface{}, msg []byte) ([]byte, error) {
 	return leader[e.Type()](app, &e)
 }
 
-func doLeaderPingPong(app *app.App, e *cloudevents.Event) ([]byte, error) {
+func doLeaderPingPong(app *app.Data, e *cloudevents.Event) ([]byte, error) {
 	switch {
 	case string(e.Data()) != "PING":
 		return nil, fmt.Errorf("invalid message")
@@ -46,7 +46,7 @@ func doLeaderPingPong(app *app.App, e *cloudevents.Event) ([]byte, error) {
 	}
 }
 
-type LeaderLive struct{ *app.App }
+type LeaderLive struct{ *app.Data }
 
 func (l *LeaderLive) Run(ctx context.Context) {
 	glog.Infof("start leader liveness broadcaster (every 5mins)")

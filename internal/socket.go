@@ -13,7 +13,7 @@ import (
 	"github.com/golang/glog"
 )
 
-func SocketListen(ctx context.Context, app *app.App, done ...chan error) {
+func SocketListen(ctx context.Context, appdata *app.Data, done ...chan error) {
 	rmsock := func() {
 		if _, err := os.Stat(params.SocketFile); err == nil {
 			os.RemoveAll(params.SocketFile)
@@ -56,11 +56,11 @@ func SocketListen(ctx context.Context, app *app.App, done ...chan error) {
 			continue
 		}
 
-		go do(conn, app)
+		go do(conn, appdata)
 	}
 }
 
-func do(conn net.Conn, appdata *app.App) {
+func do(conn net.Conn, appdata *app.Data) {
 	defer conn.Close()
 	_ = appdata
 	limit := 65_536 // max 65KB

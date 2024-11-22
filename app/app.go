@@ -14,7 +14,7 @@ const (
 	CRLF = "\r\n"
 )
 
-type App struct {
+type Data struct {
 	*sync.Mutex
 	SpannerDb *spanner.Client
 	Hedge     *hedge.Op
