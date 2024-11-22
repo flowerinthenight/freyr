@@ -67,8 +67,8 @@ func do(conn net.Conn, appdata *app.Data) {
 	b := make([]byte, limit)
 	n, err := conn.Read(b)
 	if err != nil {
-		glog.Error(err)
-		conn.Write([]byte(fmt.Sprintf("-ERR %v%v", err.Error(), app.CRLF)))
+		serr := fmt.Sprintf("-ERR %v", err.Error())
+		conn.Write([]byte(serr + app.CRLF))
 		return
 	}
 
@@ -86,14 +86,15 @@ func do(conn net.Conn, appdata *app.Data) {
 
 	cmds := bytes.Split(b[1:n-2], []byte(app.CRLF))
 	if len(cmds) < 2 {
-		conn.Write([]byte("-ERR no command" + app.CRLF))
+		conn.Write([]byte("-ERR no input command" + app.CRLF))
 		return
 	}
 
 	// Validate length entries.
 	for i := 0; i < len(cmds); i += 2 {
 		if fmt.Sprintf("%d", len(cmds[i+1])) != string(cmds[i]) {
-			conn.Write([]byte("-ERR invalid command" + app.CRLF))
+			serr := fmt.Sprintf("-ERR invalid command '%v'", cmds[i+1])
+			conn.Write([]byte(serr + app.CRLF))
 			return
 		}
 	}
@@ -101,7 +102,7 @@ func do(conn net.Conn, appdata *app.Data) {
 	switch string(cmds[1]) {
 	case "SUBLDR":
 		if len(cmds) < 4 {
-			conn.Write([]byte("-ERR invalid command format" + app.CRLF))
+			conn.Write([]byte("-ERR arguments missing" + app.CRLF))
 			return
 		}
 
@@ -131,5 +132,5 @@ func do(conn net.Conn, appdata *app.Data) {
 		return
 	}
 
-	conn.Write([]byte("-OK" + app.CRLF))
+	conn.Write([]byte("+OK" + app.CRLF))
 }
