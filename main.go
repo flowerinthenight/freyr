@@ -3,11 +3,8 @@ package main
 import (
 	"context"
 	goflag "flag"
-	"os"
-	"os/signal"
-	"syscall"
+	"log"
 
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 )
@@ -42,25 +39,14 @@ Example:
 			goflag.Parse() // combine cobra and glog flags
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			ctx := context.Background()
-			quit, cancel := context.WithCancel(ctx)
-			done := make(chan error)
-			go run(quit, done)
-
-			go func() {
-				defer cancel()
-				sigch := make(chan os.Signal, 1)
-				signal.Notify(sigch, syscall.SIGINT, syscall.SIGTERM)
-				glog.Infof("sigterm: %v", <-sigch)
-			}()
-
-			<-done
+			log.Println("See -h for subcommands.")
 		},
 	}
 
 	root.PersistentFlags().SortFlags = false
 	root.AddCommand(
 		runCmd(),
+		apiCmd(),
 		testCmd(),
 	)
 

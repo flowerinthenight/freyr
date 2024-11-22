@@ -37,7 +37,7 @@ func runCmd() *cobra.Command {
 				defer cancel()
 				sigch := make(chan os.Signal, 1)
 				signal.Notify(sigch, syscall.SIGINT, syscall.SIGTERM)
-				glog.Infof("sigterm: %v", <-sigch)
+				<-sigch
 			}()
 
 			<-done
