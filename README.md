@@ -50,10 +50,10 @@ Subscribe to leader notifications. Notifications will be sent to the provided `/
 
 ``` sh
 # Command:
-$SUBLDR <path/to/socket>
+SUBLDR <path/to/socket>
 
 # Example:
-$SUBLDR /tmp/hedged-notify.sock
+SUBLDR /tmp/hedged-notify.sock
 ```
 
 #### UNSUBLDR
@@ -62,5 +62,5 @@ Unsubscribe from leader notifications.
 
 ``` sh
 # Command:
-$SUBLDR
+SUBLDR
 ```
