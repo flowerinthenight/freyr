@@ -42,6 +42,8 @@ $ ./hedged api SUBLDR /tmp/hedged-notify-8082.sock --socket-file /tmp/hedged-808
 
 ## API Reference
 
+The API protocol uses a subset of Redis' [RESP](https://redis.io/docs/latest/develop/reference/protocol-spec/) wire protocol; specifically, **Simple strings**, **Simple errors**, and **Bulk strings**.
+
 #### SUBLDR
 
 Subscribe to leader notifications. Notifications will be sent to the provided `/path/to/socket` file.
