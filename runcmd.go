@@ -82,6 +82,7 @@ func run(ctx context.Context, done chan error) {
 		LeaderOk: timedoff.New(time.Minute*30, &timedoff.CallbackT{
 			Callback: func(args interface{}) {
 				glog.Errorf("failed: no leader for the past 30mins?")
+				// TODO: Include in the leader notification
 			},
 		}),
 	}
