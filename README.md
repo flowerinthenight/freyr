@@ -26,6 +26,18 @@ $ ./hedged run --logtostderr \
   --lock-table mylocktable \
   --log-table mylocktable_log \
   --socket-file /tmp/hedged-8082.sock
+
+# Run a sink reader for notifications from 1st instance (different terminal):
+$ ./hedged sink --logtostderr /tmp/hedged-notify-8080.sock
+
+# Run a sink reader for notifications from 2nd instance (different terminal):
+$ ./hedged sink --logtostderr /tmp/hedged-notify-8082.sock
+
+# Subscribe to notifications from 1st instance thru API:
+$ ./hedged api SUBLDR /tmp/hedged-notify-8080.sock --socket-file /tmp/hedged-8080.sock
+
+# Subscribe to notifications from 2nd instance thru API:
+$ ./hedged api SUBLDR /tmp/hedged-notify-8082.sock --socket-file /tmp/hedged-8082.sock
 ```
 
 ## API Reference
