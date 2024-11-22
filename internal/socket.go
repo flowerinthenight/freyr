@@ -85,6 +85,10 @@ func do(conn net.Conn, appdata *app.Data) {
 	}
 
 	cmds := bytes.Split(b[1:n-2], []byte(app.CRLF))
+	if len(cmds) < 2 {
+		conn.Write([]byte("-ERR no command" + app.CRLF))
+		return
+	}
 
 	// Validate length entries.
 	for i := 0; i < len(cmds); i += 2 {
@@ -94,8 +98,17 @@ func do(conn net.Conn, appdata *app.Data) {
 		}
 	}
 
-	for i := 0; i < len(cmds); i += 2 {
-		glog.Infof("read: cmd=%q", string(cmds[i+1]))
+	switch string(cmds[1]) {
+	case "SUBLDR":
+		if len(cmds) < 4 {
+			conn.Write([]byte("-ERR invalid command format" + app.CRLF))
+			return
+		}
+
+		glog.Infof("subscribe to leader notifications via %v", string(cmds[3]))
+	default:
+		conn.Write([]byte("-ERR unknown command" + app.CRLF))
+		return
 	}
 
 	conn.Write([]byte("-OK" + app.CRLF))
