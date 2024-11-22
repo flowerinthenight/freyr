@@ -8,6 +8,9 @@ A long-running service based on [hedge](https://github.com/flowerinthenight/hedg
 Sample run:
 
 ``` sh
+# Build the binary:
+$ go build -v
+
 # Run 1st instance:
 $ ./hedged run --logtostderr \
   --db projects/{v}/instances/{v}/databases/{v} \
