@@ -57,31 +57,35 @@ func (l *LeaderNotify) Do(ctx context.Context) {
 		default:
 		}
 
+		var ldr int
 		hl, _ := l.Hedge.HasLock()
 		if hl {
-			l.SubLdrMutex.Lock()
-			socket := l.SubLdrSocket
-			l.SubLdrMutex.Unlock()
-
-			func() {
-				if socket == "" {
-					return
-				}
-
-				conn, err := net.Dial("unix", socket)
-				if err != nil {
-					glog.Errorf("Dial failed: %v", err)
-					return
-				}
-
-				defer conn.Close()
-				_, err = conn.Write([]byte("sample"))
-				if err != nil {
-					glog.Errorf("Write failed: %v", err)
-					return
-				}
-			}()
+			ldr = 1
 		}
+
+		l.SubLdrMutex.Lock()
+		socket := l.SubLdrSocket
+		l.SubLdrMutex.Unlock()
+
+		func() {
+			if socket == "" {
+				return
+			}
+
+			conn, err := net.Dial("unix", socket)
+			if err != nil {
+				glog.Errorf("Dial failed: %v", err)
+				return
+			}
+
+			defer conn.Close()
+			msg := fmt.Sprintf("+%d", ldr)
+			_, err = conn.Write([]byte(msg + app.CRLF))
+			if err != nil {
+				glog.Errorf("Write failed: %v", err)
+				return
+			}
+		}()
 
 		sec := l.SubLdrInterval.Load()
 		if sec == 0 {

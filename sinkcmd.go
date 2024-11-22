@@ -94,7 +94,7 @@ func sink(ctx context.Context, socket string, done chan error) {
 				return
 			}
 
-			glog.Infof("notification: %v", string(b))
+			glog.Infof("notification: %q", string(b[:4]))
 		}(conn)
 	}
 }
