@@ -12,11 +12,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func subSinkCmd() *cobra.Command {
+func sinkCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "subsink <path/to/socket>",
-		Short: "Daemonize (run as service)",
-		Long:  "Daemonize (run as service).",
+		Use:   "sink <path/to/socket>",
+		Short: "Sink server for leader notifications",
+		Long:  "Sink server for leader notifications.",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				glog.Error("no socket file provided")
