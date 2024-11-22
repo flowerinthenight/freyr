@@ -3,15 +3,18 @@ package internal
 import (
 	"bytes"
 	"context"
-	"io"
+	"fmt"
 	"net"
 	"os"
-	"strings"
 	"sync/atomic"
 
 	"github.com/flowerinthenight/hedged/app"
 	"github.com/flowerinthenight/hedged/params"
 	"github.com/golang/glog"
+)
+
+const (
+	CRLF = "\r\n"
 )
 
 func SocketListen(ctx context.Context, app *app.App, done ...chan error) {
@@ -62,25 +65,42 @@ func SocketListen(ctx context.Context, app *app.App, done ...chan error) {
 }
 
 func do(conn net.Conn, app *app.App) {
-	_ = app
 	defer conn.Close()
-	buf := &bytes.Buffer{}
-	_, err := io.Copy(buf, conn)
+	_ = app
+	limit := 65_536 // max 65KB
+	b := make([]byte, limit)
+	n, err := conn.Read(b)
 	if err != nil {
 		glog.Error(err)
+		conn.Write([]byte(fmt.Sprintf("-ERR %v%v", err.Error(), CRLF)))
 		return
 	}
 
-	s := strings.ToUpper(buf.String())
-
-	buf.Reset()
-	buf.WriteString(s)
-
-	_, err = io.Copy(conn, buf)
-	if err != nil {
-		glog.Error(err)
+	// We use Redis protocol bulk strings for the command.
+	if b[0] != '$' {
+		conn.Write([]byte("-ERR invalid command" + CRLF))
 		return
 	}
 
-	glog.Info("<<< ", s)
+	// Should be properly terminated.
+	if !(b[n-2] == '\r' && b[n-1] == '\n') {
+		conn.Write([]byte("-ERR invalid command" + CRLF))
+		return
+	}
+
+	cmds := bytes.Split(b[1:n-2], []byte(CRLF))
+
+	// Validate length entries.
+	for i := 0; i < len(cmds); i += 2 {
+		if fmt.Sprintf("%d", len(cmds[i+1])) != string(cmds[i]) {
+			conn.Write([]byte("-ERR invalid command" + CRLF))
+			return
+		}
+	}
+
+	for i := 0; i < len(cmds); i += 2 {
+		glog.Infof("read: cmd=%q", string(cmds[i+1]))
+	}
+
+	conn.Write([]byte("-OK" + CRLF))
 }
