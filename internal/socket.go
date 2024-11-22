@@ -57,14 +57,13 @@ func SocketListen(ctx context.Context, app *app.App, done ...chan error) {
 			continue
 		}
 
-		go do(conn)
+		go do(conn, app)
 	}
 }
 
-func do(conn net.Conn) {
+func do(conn net.Conn, app *app.App) {
+	_ = app
 	defer conn.Close()
-	glog.Infof("connected: %s", conn.RemoteAddr().Network())
-
 	buf := &bytes.Buffer{}
 	_, err := io.Copy(buf, conn)
 	if err != nil {
