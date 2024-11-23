@@ -1,3 +1,5 @@
+[![build](https://github.com/flowerinthenight/freyr/actions/workflows/main.yml/badge.svg)](https://github.com/flowerinthenight/freyr/actions/workflows/main.yml)
+
 ## Overview
 
 Companion service to [freya](https://github.com/flowerinthenight/freya/).
