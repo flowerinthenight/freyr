@@ -72,11 +72,6 @@ func APICmd() *cobra.Command {
 	}
 
 	cmd.Flags().SortFlags = false
-	cmd.Flags().StringVar(&socketFile,
-		"socket-file",
-		filepath.Join(os.TempDir(), "freyr.sock"),
-		"Socket file for the API",
-	)
-
+	cmd.Flags().StringVar(&socketFile, "socket-file", filepath.Join(os.TempDir(), "freyr.sock"), "Socket file for the API")
 	return cmd
 }
