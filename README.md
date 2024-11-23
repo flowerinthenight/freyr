@@ -1,6 +1,3 @@
-[![build](https://github.com/flowerinthenight/hedged/actions/workflows/main.yml/badge.svg)](https://github.com/flowerinthenight/hedged/actions/workflows/main.yml)
-[![Docker Repository on Quay](https://quay.io/repository/flowerinthenight/hedged/status "Docker Repository on Quay")](https://quay.io/repository/flowerinthenight/hedged)
-
 ## Overview
 
 A long-running service based on [hedge](https://github.com/flowerinthenight/hedge).
