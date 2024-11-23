@@ -59,8 +59,8 @@ func RunCmd() *cobra.Command {
 	cmd.Flags().StringVar(&params.LockTable, "lock-table", "freyr", "Spanner table for lock")
 	cmd.Flags().StringVar(&params.LockName, "lock-name", "freyr", "Lock name")
 	cmd.Flags().StringVar(&params.LogTable, "log-table", "freyr_kv", "Spanner table for K/V storage and semaphore meta")
-	cmd.Flags().Int64Var(&params.LeaderInterval, "leader-interval", 5000, "Membership sync interval in milliseconds")
-	cmd.Flags().Int64Var(&params.SyncInterval, "sync-interval", 5000, "Membership sync interval in milliseconds")
+	cmd.Flags().Int64Var(&params.LeaderInterval, "leader-interval", 3000, "Membership sync interval in milliseconds")
+	cmd.Flags().Int64Var(&params.SyncInterval, "sync-interval", 3000, "Membership sync interval in milliseconds")
 	return cmd
 }
 
