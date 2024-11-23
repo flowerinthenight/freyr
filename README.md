@@ -1,6 +1,6 @@
 ## Overview
 
-A long-running service based on [hedge](https://github.com/flowerinthenight/hedge).
+Companion service to [freya](https://github.com/flowerinthenight/freya/).
 
 Sample run:
 
