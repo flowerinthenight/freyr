@@ -9,32 +9,32 @@ Sample run:
 $ go build -v
 
 # Run 1st instance:
-$ ./hedged run --logtostderr \
+$ ./freyr run --logtostderr \
   --db projects/{v}/instances/{v}/databases/{v} \
   --host-port :8080 \
   --lock-table mylocktable \
   --log-table mylocktable_log \
-  --socket-file /tmp/hedged-8080.sock
+  --socket-file /tmp/freyr-8080.sock
 
 # Run 2nd instance (different terminal):
-$ ./hedged run --logtostderr \
+$ ./freyr run --logtostderr \
   --db projects/{v}/instances/{v}/databases/{v} \
   --host-port :8082 \
   --lock-table mylocktable \
   --log-table mylocktable_log \
-  --socket-file /tmp/hedged-8082.sock
+  --socket-file /tmp/freyr-8082.sock
 
 # Run a sink reader for notifications from 1st instance (different terminal):
-$ ./hedged sink --logtostderr /tmp/hedged-notify-8080.sock
+$ ./freyr sink --logtostderr /tmp/freyr-notify-8080.sock
 
 # Run a sink reader for notifications from 2nd instance (different terminal):
-$ ./hedged sink --logtostderr /tmp/hedged-notify-8082.sock
+$ ./freyr sink --logtostderr /tmp/freyr-notify-8082.sock
 
 # Subscribe to notifications from 1st instance thru API:
-$ ./hedged api SUBLDR /tmp/hedged-notify-8080.sock --socket-file /tmp/hedged-8080.sock
+$ ./freyr api SUBLDR /tmp/freyr-notify-8080.sock --socket-file /tmp/freyr-8080.sock
 
 # Subscribe to notifications from 2nd instance thru API:
-$ ./hedged api SUBLDR /tmp/hedged-notify-8082.sock --socket-file /tmp/hedged-8082.sock
+$ ./freyr api SUBLDR /tmp/freyr-notify-8082.sock --socket-file /tmp/freyr-8082.sock
 ```
 
 ## API Reference
@@ -50,7 +50,7 @@ Subscribe to leader notifications. Notifications will be sent to the provided `/
 SUBLDR <path/to/socket>
 
 # Example:
-SUBLDR /tmp/hedged-notify.sock
+SUBLDR /tmp/freyr-notify.sock
 ```
 
 #### UNSUBLDR

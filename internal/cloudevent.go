@@ -12,8 +12,8 @@ import (
 // args[2] = contenttype (string), default: application/json
 // See https://github.com/cloudevents/sdk-go for more details.
 func NewEvent(data interface{}, args ...string) cloudevents.Event {
-	src := "hedged/internal"
-	typ := "hedged.events.internal"
+	src := "freyr/internal"
+	typ := "freyr.events.internal"
 	ctt := cloudevents.ApplicationJSON
 	switch {
 	case len(args) >= 3:

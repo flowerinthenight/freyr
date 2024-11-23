@@ -8,8 +8,8 @@ import (
 	"os"
 	"sync/atomic"
 
-	"github.com/flowerinthenight/hedged/app"
-	"github.com/flowerinthenight/hedged/params"
+	"github.com/flowerinthenight/freyr/app"
+	"github.com/flowerinthenight/freyr/params"
 	"github.com/golang/glog"
 )
 

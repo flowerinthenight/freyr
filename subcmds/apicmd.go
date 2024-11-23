@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/flowerinthenight/hedged/app"
+	"github.com/flowerinthenight/freyr/app"
 	"github.com/spf13/cobra"
 )
 
@@ -74,7 +74,7 @@ func APICmd() *cobra.Command {
 	cmd.Flags().SortFlags = false
 	cmd.Flags().StringVar(&socketFile,
 		"socket-file",
-		filepath.Join(os.TempDir(), "hedged.sock"),
+		filepath.Join(os.TempDir(), "freyr.sock"),
 		"Socket file for the API",
 	)
 

@@ -7,7 +7,7 @@
 *.dll
 *.so
 *.dylib
-hedged
+freyr
 
 # Test binary, built with `go test -c`
 *.test

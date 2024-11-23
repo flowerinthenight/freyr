@@ -1,7 +1,7 @@
 version: 2
 builds:
-- id: "hedged"
-  binary: hedged
+- id: "freyr"
+  binary: freyr
   goos:
   - linux
   - darwin
@@ -9,7 +9,7 @@ builds:
   - amd64
 checksum:
   name_template: 'checksums.txt'
-dist: /tmp/hedged/dist
+dist: /tmp/freyr/dist
 changelog:
   sort: asc
   filters:
@@ -19,16 +19,16 @@ changelog:
 release:
   github:
     owner: flowerinthenight
-    name: hedged
+    name: freyr
 brews:
 - repository:
     owner: flowerinthenight
     name: homebrew-tap
-  name: hedged
-  homepage: "https://github.com/flowerinthenight/hedged"
-  description: "A generic daemon based on https://flowerinthenight/hedge/."
+  name: freyr
+  homepage: "https://github.com/flowerinthenight/freyr"
+  description: "Companiion service to https://github.com/flowerinthenight/freya/."
   directory: Formula
   install: |
-    bin.install "hedged"
+    bin.install "freyr"
   test: |
-    assert_match /A generic daemon based on https, shell_output("#{bin}/hedged -h", 0)
+    assert_match /Companiion service to https, shell_output("#{bin}/freyr -h", 0)

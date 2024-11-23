@@ -8,8 +8,8 @@ import (
 	"time"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/flowerinthenight/freyr/app"
 	"github.com/flowerinthenight/hedge"
-	"github.com/flowerinthenight/hedged/app"
 	"github.com/golang/glog"
 )
 

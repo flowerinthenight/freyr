@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	EventSource = "hedged"
+	EventSource = "freyr"
 
 	CRLF = "\r\n"
 )
