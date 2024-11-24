@@ -53,13 +53,13 @@ func RunCmd() *cobra.Command {
 	}
 
 	cmd.Flags().SortFlags = false
-	cmd.Flags().StringVar(&params.DbString, "db", "", "Spanner DB connection URL, fmt: projects/{v}/instances/{v}/databases/{v}")
-	cmd.Flags().StringVar(&params.HostPort, "host-port", ":8080", "TCP host:port for main comms (gRPC will be :port+1), fmt: [host]<:port>")
+	cmd.Flags().StringVar(&params.DbString, "db", "", "Spanner DB connection URL (hedge), fmt: projects/{v}/instances/{v}/databases/{v}")
+	cmd.Flags().StringVar(&params.HostPort, "host-port", ":8080", "TCP host:port for hedge's main comms (gRPC will be :port+1), fmt: [host]<:port>")
 	cmd.Flags().StringVar(&params.SocketFile, "socket-file", filepath.Join(os.TempDir(), "freyr.sock"), "Socket file for the API")
-	cmd.Flags().StringVar(&params.LockTable, "lock-table", "freyr", "Spanner table for lock")
-	cmd.Flags().StringVar(&params.LockName, "lock-name", "freyr", "Lock name")
+	cmd.Flags().StringVar(&params.LockTable, "lock-table", "freyr", "Spanner table for hedge lock")
+	cmd.Flags().StringVar(&params.LockName, "lock-name", "freyr", "Lock name for hedge lock")
 	cmd.Flags().StringVar(&params.LogTable, "log-table", "freyr_kv", "Spanner table for K/V storage and semaphore meta")
-	cmd.Flags().Int64Var(&params.LeaderInterval, "leader-interval", 3000, "Membership sync interval in milliseconds")
+	cmd.Flags().Int64Var(&params.LeaderInterval, "leader-interval", 3000, "Leader check interval in milliseconds")
 	cmd.Flags().Int64Var(&params.SyncInterval, "sync-interval", 3000, "Membership sync interval in milliseconds")
 	return cmd
 }
