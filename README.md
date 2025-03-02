@@ -16,7 +16,7 @@ $ ./groupd run --logtostderr \
   --host-port :8080 \
   --lock-table mylocktable \
   --log-table mylocktable_log \
-  --socket-file /tmp/freyr-8080.sock
+  --socket-file /tmp/groupd-8080.sock
 
 # Run 2nd instance (different terminal):
 $ ./groupd run --logtostderr \
@@ -24,19 +24,19 @@ $ ./groupd run --logtostderr \
   --host-port :8082 \
   --lock-table mylocktable \
   --log-table mylocktable_log \
-  --socket-file /tmp/freyr-8082.sock
+  --socket-file /tmp/groupd-8082.sock
 
 # Run a sink reader for notifications from 1st instance (different terminal):
-$ ./groupd sink --logtostderr /tmp/freyr-notify-8080.sock
+$ ./groupd sink --logtostderr /tmp/groupd-notify-8080.sock
 
 # Run a sink reader for notifications from 2nd instance (different terminal):
-$ ./groupd sink --logtostderr /tmp/freyr-notify-8082.sock
+$ ./groupd sink --logtostderr /tmp/groupd-notify-8082.sock
 
 # Subscribe to notifications from 1st instance thru API:
-$ ./groupd api SUBLDR /tmp/freyr-notify-8080.sock --socket-file /tmp/freyr-8080.sock
+$ ./groupd api SUBLDR /tmp/groupd-notify-8080.sock --socket-file /tmp/groupd-8080.sock
 
 # Subscribe to notifications from 2nd instance thru API:
-$ ./groupd api SUBLDR /tmp/freyr-notify-8082.sock --socket-file /tmp/freyr-8082.sock
+$ ./groupd api SUBLDR /tmp/groupd-notify-8082.sock --socket-file /tmp/groupd-8082.sock
 ```
 
 ## API Reference
@@ -52,7 +52,7 @@ Subscribe to leader notifications. Notifications will be sent to the provided `/
 SUBLDR <path/to/socket>
 
 # Example:
-SUBLDR /tmp/freyr-notify.sock
+SUBLDR /tmp/groupd-notify.sock
 ```
 
 #### UNSUBLDR
