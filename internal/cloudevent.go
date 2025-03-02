@@ -11,7 +11,7 @@ import (
 // args[1] = type (string)
 // args[2] = contenttype (string), default: application/json
 // See https://github.com/cloudevents/sdk-go for more details.
-func NewEvent(data interface{}, args ...string) cloudevents.Event {
+func NewEvent(data any, args ...string) cloudevents.Event {
 	src := "hedged/internal"
 	typ := "hedged.events.internal"
 	ctt := cloudevents.ApplicationJSON

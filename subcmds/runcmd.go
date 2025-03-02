@@ -32,8 +32,8 @@ var (
 func RunCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "run",
-		Short: "Daemonize (run as service)",
-		Long:  "Daemonize (run as service).",
+		Short: "Run as service (daemonize)",
+		Long:  "Run as service (daemonize).",
 		Run: func(cmd *cobra.Command, args []string) {
 			ctx := context.Background()
 			quit, cancel := context.WithCancel(ctx)
@@ -75,7 +75,7 @@ func run(ctx context.Context, done chan error) {
 	appdata := &app.Data{
 		SpannerDb: db,
 		LeaderOk: timedoff.New(time.Minute*30, &timedoff.CallbackT{
-			Callback: func(args interface{}) {
+			Callback: func(args any) {
 				glog.Errorf("failed: no leader for the past 30mins?")
 				// TODO: Include in the leader notification
 			},
@@ -103,7 +103,7 @@ func run(ctx context.Context, done chan error) {
 		params.LogTable,
 		hedge.WithDuration(params.LeaderInterval),
 		hedge.WithGroupSyncInterval(time.Millisecond*time.Duration(params.SyncInterval)),
-		hedge.WithLeaderCallback(appdata, func(d interface{}, m []byte) {
+		hedge.WithLeaderCallback(appdata, func(d any, m []byte) {
 			ad := d.(*app.Data)
 			ad.SubLdrMutex.Lock()
 			socket := ad.SubLdrSocket

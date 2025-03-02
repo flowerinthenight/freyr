@@ -17,7 +17,7 @@ var (
 	}
 )
 
-func BroadcastHandler(ad interface{}, msg []byte) ([]byte, error) {
+func BroadcastHandler(ad any, msg []byte) ([]byte, error) {
 	appdata := ad.(*app.Data)
 	var e cloudevents.Event
 	err := json.Unmarshal(msg, &e)

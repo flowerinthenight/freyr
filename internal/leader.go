@@ -21,7 +21,7 @@ var (
 	}
 )
 
-func LeaderHandler(data interface{}, msg []byte) ([]byte, error) {
+func LeaderHandler(data any, msg []byte) ([]byte, error) {
 	app := data.(*app.Data)
 	var e cloudevents.Event
 	err := json.Unmarshal(msg, &e)
