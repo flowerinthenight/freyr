@@ -1,8 +1,8 @@
-[![build](https://github.com/flowerinthenight/freyr/actions/workflows/main.yml/badge.svg)](https://github.com/flowerinthenight/freyr/actions/workflows/main.yml)
+[![main](https://github.com/flowerinthenight/groupd/actions/workflows/main.yml/badge.svg)](https://github.com/flowerinthenight/groupd/actions/workflows/main.yml)
 
 ## Overview
 
-Companion service to [freya](https://github.com/flowerinthenight/freya/).
+Generic cluster service built on [hedge](https://github.com/flowerinthenight/hedge).
 
 Sample run:
 
@@ -11,7 +11,7 @@ Sample run:
 $ go build -v
 
 # Run 1st instance:
-$ ./freyr run --logtostderr \
+$ ./groupd run --logtostderr \
   --db projects/{v}/instances/{v}/databases/{v} \
   --host-port :8080 \
   --lock-table mylocktable \
@@ -19,7 +19,7 @@ $ ./freyr run --logtostderr \
   --socket-file /tmp/freyr-8080.sock
 
 # Run 2nd instance (different terminal):
-$ ./freyr run --logtostderr \
+$ ./groupd run --logtostderr \
   --db projects/{v}/instances/{v}/databases/{v} \
   --host-port :8082 \
   --lock-table mylocktable \
@@ -27,16 +27,16 @@ $ ./freyr run --logtostderr \
   --socket-file /tmp/freyr-8082.sock
 
 # Run a sink reader for notifications from 1st instance (different terminal):
-$ ./freyr sink --logtostderr /tmp/freyr-notify-8080.sock
+$ ./groupd sink --logtostderr /tmp/freyr-notify-8080.sock
 
 # Run a sink reader for notifications from 2nd instance (different terminal):
-$ ./freyr sink --logtostderr /tmp/freyr-notify-8082.sock
+$ ./groupd sink --logtostderr /tmp/freyr-notify-8082.sock
 
 # Subscribe to notifications from 1st instance thru API:
-$ ./freyr api SUBLDR /tmp/freyr-notify-8080.sock --socket-file /tmp/freyr-8080.sock
+$ ./groupd api SUBLDR /tmp/freyr-notify-8080.sock --socket-file /tmp/freyr-8080.sock
 
 # Subscribe to notifications from 2nd instance thru API:
-$ ./freyr api SUBLDR /tmp/freyr-notify-8082.sock --socket-file /tmp/freyr-8082.sock
+$ ./groupd api SUBLDR /tmp/freyr-notify-8082.sock --socket-file /tmp/freyr-8082.sock
 ```
 
 ## API Reference
