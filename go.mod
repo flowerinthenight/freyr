@@ -9,10 +9,10 @@ require (
 	github.com/cloudevents/sdk-go/v2 v2.15.2
 	github.com/flowerinthenight/hedge/v2 v2.0.1
 	github.com/flowerinthenight/timedoff v1.0.2
-	github.com/golang/glog v1.2.3
+	github.com/golang/glog v1.2.4
 	github.com/google/uuid v1.6.0
-	github.com/spf13/cobra v1.8.1
-	github.com/spf13/pflag v1.0.5
+	github.com/spf13/cobra v1.9.1
+	github.com/spf13/pflag v1.0.6
 )
 
 require (
