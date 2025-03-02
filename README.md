@@ -61,5 +61,5 @@ Unsubscribe from leader notifications.
 
 ``` sh
 # Command:
-SUBLDR
+UNSUBLDR
 ```
