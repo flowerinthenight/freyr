@@ -1,5 +1,4 @@
 [![build](https://github.com/flowerinthenight/freyr/actions/workflows/main.yml/badge.svg)](https://github.com/flowerinthenight/freyr/actions/workflows/main.yml)
-[![Docker Repository on Quay](https://quay.io/repository/flowerinthenight/freyr/status "Docker Repository on Quay")](https://quay.io/repository/flowerinthenight/freyr)
 
 ## Overview
 
