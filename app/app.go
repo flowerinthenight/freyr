@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	EventSource = "groupd"
+	EventSource = "hedged"
 
 	CRLF = "\r\n"
 )

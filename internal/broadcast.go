@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
-	"github.com/flowerinthenight/groupd/app"
+	"github.com/flowerinthenight/hedged/app"
 	"github.com/golang/glog"
 )
 

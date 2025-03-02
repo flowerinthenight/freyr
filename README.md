@@ -1,4 +1,4 @@
-[![main](https://github.com/flowerinthenight/groupd/actions/workflows/main.yml/badge.svg)](https://github.com/flowerinthenight/groupd/actions/workflows/main.yml)
+[![main](https://github.com/flowerinthenight/hedged/actions/workflows/main.yml/badge.svg)](https://github.com/flowerinthenight/hedged/actions/workflows/main.yml)
 
 ## Overview
 
@@ -11,32 +11,32 @@ Sample run:
 $ go build -v
 
 # Run 1st instance:
-$ ./groupd run --logtostderr \
+$ ./hedged run --logtostderr \
   --db projects/{v}/instances/{v}/databases/{v} \
   --host-port :8080 \
   --lock-table mylocktable \
   --log-table mylocktable_log \
-  --socket-file /tmp/groupd-8080.sock
+  --socket-file /tmp/hedged-8080.sock
 
 # Run 2nd instance (different terminal):
-$ ./groupd run --logtostderr \
+$ ./hedged run --logtostderr \
   --db projects/{v}/instances/{v}/databases/{v} \
   --host-port :8082 \
   --lock-table mylocktable \
   --log-table mylocktable_log \
-  --socket-file /tmp/groupd-8082.sock
+  --socket-file /tmp/hedged-8082.sock
 
 # Run a sink reader for notifications from 1st instance (different terminal):
-$ ./groupd sink --logtostderr /tmp/groupd-notify-8080.sock
+$ ./hedged sink --logtostderr /tmp/hedged-notify-8080.sock
 
 # Run a sink reader for notifications from 2nd instance (different terminal):
-$ ./groupd sink --logtostderr /tmp/groupd-notify-8082.sock
+$ ./hedged sink --logtostderr /tmp/hedged-notify-8082.sock
 
 # Subscribe to notifications from 1st instance thru API:
-$ ./groupd api SUBLDR /tmp/groupd-notify-8080.sock --socket-file /tmp/groupd-8080.sock
+$ ./hedged api SUBLDR /tmp/hedged-notify-8080.sock --socket-file /tmp/hedged-8080.sock
 
 # Subscribe to notifications from 2nd instance thru API:
-$ ./groupd api SUBLDR /tmp/groupd-notify-8082.sock --socket-file /tmp/groupd-8082.sock
+$ ./hedged api SUBLDR /tmp/hedged-notify-8082.sock --socket-file /tmp/hedged-8082.sock
 ```
 
 ## API Reference
@@ -52,7 +52,7 @@ Subscribe to leader notifications. Notifications will be sent to the provided `/
 SUBLDR <path/to/socket>
 
 # Example:
-SUBLDR /tmp/groupd-notify.sock
+SUBLDR /tmp/hedged-notify.sock
 ```
 
 #### UNSUBLDR

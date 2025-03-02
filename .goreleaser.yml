@@ -1,14 +1,14 @@
 version: 2
 builds:
-- id: "groupd"
-  binary: groupd
+- id: "hedged"
+  binary: hedged
   goos:
   - linux
   goarch:
   - amd64
 checksum:
   name_template: 'checksums.txt'
-dist: /tmp/groupd/dist
+dist: /tmp/hedged/dist
 changelog:
   sort: asc
   filters:
@@ -18,16 +18,16 @@ changelog:
 release:
   github:
     owner: flowerinthenight
-    name: groupd
+    name: hedged
 brews:
 - repository:
     owner: flowerinthenight
     name: homebrew-tap
-  name: groupd
-  homepage: "https://github.com/flowerinthenight/groupd"
+  name: hedged
+  homepage: "https://github.com/flowerinthenight/hedged"
   description: "Generic cluster service built on hedge."
   directory: Formula
   install: |
-    bin.install "groupd"
+    bin.install "hedged"
   test: |
     assert_match /Generic cluster service built on hedge/, shell_output("#{bin}/freyr -h", 0)
