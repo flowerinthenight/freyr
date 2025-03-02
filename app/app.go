@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	EventSource = "freyr"
+	EventSource = "groupd"
 
 	CRLF = "\r\n"
 )

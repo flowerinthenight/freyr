@@ -14,9 +14,9 @@ import (
 	"time"
 
 	"cloud.google.com/go/spanner"
-	"github.com/flowerinthenight/freyr/app"
-	"github.com/flowerinthenight/freyr/internal"
-	"github.com/flowerinthenight/freyr/params"
+	"github.com/flowerinthenight/groupd/app"
+	"github.com/flowerinthenight/groupd/internal"
+	"github.com/flowerinthenight/groupd/params"
 	"github.com/flowerinthenight/hedge"
 	"github.com/flowerinthenight/timedoff"
 	"github.com/golang/glog"
@@ -55,17 +55,17 @@ func RunCmd() *cobra.Command {
 	cmd.Flags().SortFlags = false
 	cmd.Flags().StringVar(&params.DbString, "db", "", "Spanner DB connection URL (hedge), fmt: projects/{v}/instances/{v}/databases/{v}")
 	cmd.Flags().StringVar(&params.HostPort, "host-port", ":8080", "TCP host:port for hedge's main comms (gRPC will be :port+1), fmt: [host]<:port>")
-	cmd.Flags().StringVar(&params.SocketFile, "socket-file", filepath.Join(os.TempDir(), "freyr.sock"), "Socket file for the API")
-	cmd.Flags().StringVar(&params.LockTable, "lock-table", "freyr", "Spanner table for hedge lock")
-	cmd.Flags().StringVar(&params.LockName, "lock-name", "freyr", "Lock name for hedge lock")
-	cmd.Flags().StringVar(&params.LogTable, "log-table", "freyr_kv", "Spanner table for K/V storage and semaphore meta")
+	cmd.Flags().StringVar(&params.SocketFile, "socket-file", filepath.Join(os.TempDir(), "groupd.sock"), "Socket file for the API")
+	cmd.Flags().StringVar(&params.LockTable, "lock-table", "groupd", "Spanner table for hedge lock")
+	cmd.Flags().StringVar(&params.LockName, "lock-name", "groupd", "Lock name for hedge lock")
+	cmd.Flags().StringVar(&params.LogTable, "log-table", "groupd_kv", "Spanner table for K/V storage and semaphore meta")
 	cmd.Flags().Int64Var(&params.LeaderInterval, "leader-interval", 3000, "Leader check interval in milliseconds")
 	cmd.Flags().Int64Var(&params.SyncInterval, "sync-interval", 3000, "Membership sync interval in milliseconds")
 	return cmd
 }
 
 func run(ctx context.Context, done chan error) {
-	glog.Infof("starting freyr on %v", params.DbString)
+	glog.Infof("starting groupd on %v", params.DbString)
 	db, err := spanner.NewClient(cctx(ctx), params.DbString)
 	if err != nil {
 		glog.Fatal(err)
@@ -82,8 +82,8 @@ func run(ctx context.Context, done chan error) {
 		}),
 	}
 
-	host := os.Getenv("FREYR_HOST")
-	port := os.Getenv("FREYR_PORT")
+	host := os.Getenv("GROUPD_HOST")
+	port := os.Getenv("GROUPD_PORT")
 	hp := strings.Split(params.HostPort, ":")
 	if len(hp) == 2 {
 		if hp[0] != "" {

@@ -1,15 +1,14 @@
 version: 2
 builds:
-- id: "freyr"
-  binary: freyr
+- id: "groupd"
+  binary: groupd
   goos:
   - linux
-  - darwin
   goarch:
   - amd64
 checksum:
   name_template: 'checksums.txt'
-dist: /tmp/freyr/dist
+dist: /tmp/groupd/dist
 changelog:
   sort: asc
   filters:
@@ -19,16 +18,16 @@ changelog:
 release:
   github:
     owner: flowerinthenight
-    name: freyr
+    name: groupd
 brews:
 - repository:
     owner: flowerinthenight
     name: homebrew-tap
-  name: freyr
-  homepage: "https://github.com/flowerinthenight/freyr"
-  description: "Companiion service to https://github.com/flowerinthenight/freya/."
+  name: groupd
+  homepage: "https://github.com/flowerinthenight/groupd"
+  description: "Generic cluster service built on hedge."
   directory: Formula
   install: |
-    bin.install "freyr"
+    bin.install "groupd"
   test: |
-    assert_match /Companiion service to https, shell_output("#{bin}/freyr -h", 0)
+    assert_match /Generic cluster service built on hedge/, shell_output("#{bin}/freyr -h", 0)

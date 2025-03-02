@@ -1,4 +1,4 @@
-module github.com/flowerinthenight/freyr
+module github.com/flowerinthenight/groupd
 
 go 1.23.3
 
